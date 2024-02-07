@@ -1,0 +1,29 @@
+[package]
+name = "terminate_contract"
+version = "6.1.0"
+authors = ["Brian Savelkouls <b.savelkouls@roborian.com>"]
+edition = "2021"
+publish = false
+
+[dependencies]
+ink = { version = "4.3", default-features = false }
+ink_prelude = { version = "4.3.0", default-features = false }
+polymesh-ink = { version = "3.1.0", default-features = false, features = ["as-library"] }
+
+scale = { package = "parity-scale-codec", version = "3", default-features = false, features = ["derive"] }
+scale-info = { version = "2", default-features = false, features = ["derive"], optional = true }
+hex = { version = "0.4.3", default-features = false, features = ["alloc"] }
+
+[lib]
+path = "lib.rs"
+
+
+[features]
+default = ["std"]
+std = [
+    "ink/std",
+    "scale/std",
+    "scale-info/std",
+    "polymesh-ink/std"
+]
+ink-as-dependency = []
