@@ -10,7 +10,7 @@ pub mod termination {
     #[ink(storage)]
     pub struct Termination {
         admin: AccountId,
-        nominated_admin: AccountId,
+        nominated_admin: Option<AccountId>,
     }
 
     impl Termination {
@@ -25,7 +25,7 @@ pub mod termination {
 			}
             Self {
                admin: caller_account,
-               nominated_admin: caller_account,
+               nominated_admin: None,
             }
         }
 
@@ -35,17 +35,17 @@ pub mod termination {
             if self.admin != self.env().caller() {
 				panic!("Only the admin can assign a new admin");
 			}
-			self.nominated_admin = nominated_admin;
+			self.nominated_admin = Some(nominated_admin);
 		}
 
         // this call allows the nominated admin to accept the admin role
         #[ink(message)]
         pub fn accept_admin(&mut self) {
-            if self.nominated_admin != self.env().caller() {
+            if self.nominated_admin != Some(self.env().caller()) {
                 panic!("Only the nominated admin can accept the admin role");
             }
-			self.admin = self.nominated_admin;
-			self.nominated_admin = self.env().caller();
+			self.admin = self.nominated_admin.unwrap();
+			self.nominated_admin = None;
 		}
 
         // this call allows the admin to terminate the contract
